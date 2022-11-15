@@ -1,10 +1,11 @@
 #include <iostream>
+typedef std::string str;
+
 #ifndef __CODER__
 #define __CODER__
 
-int encoder(int);
-int decoder(int);
-std::string coder(const std::string&, std::string, int);
-void test_coder(const std::string&, std::string);
+str encoder(str);
+str decoder(str);
+void unit_test(str);
 
 #endif

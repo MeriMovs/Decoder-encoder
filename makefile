@@ -1,23 +1,28 @@
-all: clear create_obj create_libs create_bin
+all: bin/main.out
+COMPILER=g++
+INCLUDE=-I inc/
+LIBS=lib/libencoder.so lib/libdecoder.so lib/libunit_test.a
 
-clear:
-	@echo ......clear......
-	@rm -rf bin/* lib/* obj/* 
+clear: 
+	@echo ...... clear ......
+	@rm -rf bin obj lib
 
-create_obj: src/decoder.cpp src/encoder.cpp src/unit_test.cpp src/main.cpp
-	@echo ......create_obj......
-	@g++ -c src/decoder.cpp -I inc -o obj/decoder.o
-	@g++ -c src/encoder.cpp -I inc -o obj/encoder.o
-	echo --------
-	@g++ -c src/unit_test.cpp -I inc -o obj/unit_test.o
-	@g++ -c src/main.cpp -I inc -o obj/main.o
+create_dirs: clear
+	@echo ...... create dirs ......
+	@mkdir bin obj lib
 
-create_libs: obj/encoder.o obj/decoder.o obj/unit_test.o 
-	@echo ......create_libs......
-	@g++ -shared obj/encoder.o -o lib/libencoder.so
-	@g++ -shared obj/decoder.o -o lib/libdecoder.so
-	@ar rcs lib/lib_unit_test.a obj/unit_test.o
+obj/%.o: src/%.cpp create_dirs
+	@echo ...... create obj/%.o ......
+	@$(COMPILER) -c $< $(INCLUDE) -o $@
 
-create_bin: lib/lib_unit_test.a lib/libdecoder.so  lib/libencoder.so
-	@echo ......create_bin......
-	@g++ src/main.cpp -Wl,-rpath=./lib -L./lib -I inc/ -lencoder -ldecoder lib/lib_unit_test.a -o bin/main
+lib/lib%.so: obj/%.o
+	@echo ...... create lib/lib%.so ......
+	@$(COMPILER) -shared $^ -o $@
+
+lib/libunit_test.a: obj/unit_test.o
+	@echo ...... create lib/libunit_test.a ......
+	@ar rcs $@ $^
+
+bin/main.out: $(LIBS) obj/main.o
+	@echo ...... create main.out ......
+	@$(COMPILER) obj/main.o $(INCLUDE) -Wl,-rpath=./lib -L./lib  $(LIBS) -o $@
