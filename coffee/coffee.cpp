@@ -10,7 +10,7 @@
 
 class CoffeeMachine{
     private:
-        std::string drink_list[4] = {"Black coffee", "Espresso", "Cappuccino", "Black tea"};
+        std::string drink_list[4] = {"Milk", "Espresso", "Cappuccino", "Tea"};
         int price_list[4] = {200, 300, 400, 100};
 
 
