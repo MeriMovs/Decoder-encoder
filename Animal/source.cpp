@@ -84,6 +84,9 @@ std::string Dog::get_Dog_family(){
 
 class Cat : public Animal
 {
+    // Քանի որ և շունը, և կատուն ունեն գույներ, կարելի էր
+    // ընդհանուր m_color փոփոխական հայտարարել Animal դասում,
+    // ինչպես որ արված էր sound, feed և այլնի համար
     protected:
         std::string m_Cat_color;
         std::string m_Cat_family;
